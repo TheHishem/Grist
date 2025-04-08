@@ -34,7 +34,7 @@
     grist.onRecord(function(record) {
       const value = record["Synchrone_vs_asynchrone"];
       const div = document.getElementById("output");
-      div.innerHTML = '';
+      div.innerHTML = '';  // Reset du contenu
 
       if (!value) {
         div.textContent = 'Aucune donnée.';
@@ -44,19 +44,19 @@
       const container = document.createElement("div");
 
       if (Array.isArray(value)) {
-        // Choix multiples
+        // Si c'est un tableau (choix multiples)
         for (const val of value) {
           const tag = document.createElement("span");
           const lower = val.toLowerCase();
-          tag.className = "tag " + lower;
+          tag.className = "tag " + lower;  // Ajout de la classe "synchrone" ou "asynchrone"
           tag.textContent = val;
           container.appendChild(tag);
         }
       } else if (typeof value === 'string') {
-        // Choix simple
+        // Si c'est une chaîne (choix simple)
         const tag = document.createElement("span");
         const lower = value.toLowerCase();
-        tag.className = "tag " + lower;
+        tag.className = "tag " + lower;  // Ajout de la classe "synchrone" ou "asynchrone"
         tag.textContent = value;
         container.appendChild(tag);
       }
