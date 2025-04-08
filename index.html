@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Synchro Tags</title>
+  <title>Synchro Widget</title>
+  <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
   <style>
     body {
       font-family: sans-serif;
@@ -28,39 +29,40 @@
   <div id="output">Chargement…</div>
 
   <script>
-    window.addEventListener("message", (event) => {
-      const data = event.data;
-      if (!data || !data.tableData) return;
+    grist.ready();
 
-      const rows = data.tableData;
+    grist.onRecord(function(record) {
+      const value = record["Synchrone_vs_asynchrone"];
       const div = document.getElementById("output");
       div.innerHTML = '';
 
-      for (const row of rows) {
-        const cell = row[0];  // première colonne affichée
-        const container = document.createElement("div");
+      if (!value) {
+        div.textContent = 'Aucune donnée.';
+        return;
+      }
 
-        if (Array.isArray(cell)) {
-          // Choix multiples
-          for (const val of cell) {
-            const tag = document.createElement("span");
-            const lower = val.toLowerCase();
-            tag.className = "tag " + lower;
-            tag.textContent = val;
-            container.appendChild(tag);
-          }
-        } else if (typeof cell === 'string') {
-          // Choix simple
+      const container = document.createElement("div");
+
+      if (Array.isArray(value)) {
+        // Choix multiples
+        for (const val of value) {
           const tag = document.createElement("span");
-          const lower = cell.toLowerCase();
+          const lower = val.toLowerCase();
           tag.className = "tag " + lower;
-          tag.textContent = cell;
+          tag.textContent = val;
           container.appendChild(tag);
         }
-
-        div.appendChild(container);
+      } else if (typeof value === 'string') {
+        // Choix simple
+        const tag = document.createElement("span");
+        const lower = value.toLowerCase();
+        tag.className = "tag " + lower;
+        tag.textContent = value;
+        container.appendChild(tag);
       }
-    }, false);
+
+      div.appendChild(container);
+    });
   </script>
 </body>
 </html>
