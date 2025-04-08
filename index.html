@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Synchro Viewer</title>
+    <style>
+      body { font-family: sans-serif; padding: 10px; }
+      .tag {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin: 2px;
+        font-weight: bold;
+        color: white;
+      }
+      .synchrone { background-color: red; }
+      .asynchrone { background-color: green; }
+    </style>
+  </head>
+  <body>
+    <div id="output">Chargement…</div>
+
+    <script>
+      window.addEventListener("message", (event) => {
+        const data = event.data;
+        if (!data || !data.tableData) return;
+
+        const rows = data.tableData;
+        const div = document.getElementById("output");
+        div.innerHTML = '';
+
+        for (const row of rows) {
+          const cell = row[0];  // la première colonne affichée
+          if (!cell) continue;
+          const container = document.createElement("div");
+
+          for (const val of cell) {
+            const span = document.createElement("span");
+            const valLower = val.toLowerCase();
+            span.className = `tag ${valLower}`;
+            span.textContent = val.charAt(0).toUpperCase() + val.slice(1);
+            container.appendChild(span);
+          }
+
+          div.appendChild(container);
+        }
+      }, false);
+    </script>
+  </body>
+</html>
